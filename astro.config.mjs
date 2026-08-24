@@ -1,0 +1,18 @@
+// @ts-check
+import { defineConfig } from 'astro/config';
+
+import tailwindcss from '@tailwindcss/vite';
+import sitemap from '@astrojs/sitemap';
+
+// TODO: update once the .com domain is purchased and attached in Netlify
+const SITE_URL = 'https://rishavgc.com';
+
+// https://astro.build/config
+export default defineConfig({
+  site: SITE_URL,
+  vite: {
+    plugins: [tailwindcss()]
+  },
+
+  integrations: [sitemap()]
+});

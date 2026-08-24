@@ -1,0 +1,18 @@
+---
+import { site } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-slate-200 py-10 dark:border-slate-800">
+  <div class="container-page flex flex-col items-center gap-4 text-sm text-slate-500 sm:flex-row sm:justify-between dark:text-slate-400">
+    <p>&copy; {year} {site.name}. All rights reserved.</p>
+
+    <div class="flex items-center gap-5">
+      <a href={`mailto:${site.email}`} class="hover:text-brand-500" aria-label="Email">Email</a>
+      <a href={site.social.linkedin} target="_blank" rel="noopener noreferrer" class="hover:text-brand-500" aria-label="LinkedIn">LinkedIn</a>
+      <a href={site.social.github} target="_blank" rel="noopener noreferrer" class="hover:text-brand-500" aria-label="GitHub">GitHub</a>
+      <a href={site.social.company} target="_blank" rel="noopener noreferrer" class="hover:text-brand-500" aria-label="Compile and Commit">Compile & Commit</a>
+    </div>
+  </div>
+</footer>

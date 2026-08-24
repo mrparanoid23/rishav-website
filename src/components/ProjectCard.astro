@@ -1,0 +1,31 @@
+---
+interface Props {
+  slug: string;
+  title: string;
+  summary: string;
+  tags: string[];
+  status: string;
+}
+
+const { slug, title, summary, tags, status } = Astro.props;
+---
+
+<a
+  href={`/projects/${slug}`}
+  class="reveal card group block p-6 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
+>
+  <div class="mb-3 flex items-center justify-between">
+    <h3 class="text-lg font-semibold transition-colors group-hover:text-brand-500">{title}</h3>
+    <span class="rounded-full bg-accent-500/10 px-2.5 py-1 text-xs font-medium text-accent-500">
+      {status}
+    </span>
+  </div>
+  <p class="text-sm text-slate-600 dark:text-slate-300">{summary}</p>
+  <div class="mt-4 flex flex-wrap gap-2">
+    {tags.map((tag) => (
+      <span class="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+        {tag}
+      </span>
+    ))}
+  </div>
+</a>

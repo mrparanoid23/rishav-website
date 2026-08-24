@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const { title, summary, problem, approach, result, tags, status, link } = project.data;
+---
+
+<BaseLayout title={title} description={summary} path={`/projects/${project.id}`} type="article">
+  <article class="container-page max-w-3xl py-16">
+    <a href="/projects" class="reveal is-visible mb-6 inline-block text-sm font-semibold text-brand-500 hover:underline">← All projects</a>
+
+    <div class="reveal is-visible mb-8 flex flex-wrap items-center justify-between gap-4">
+      <h1 class="text-4xl font-bold tracking-tight">{title}</h1>
+      <span class="rounded-full bg-accent-500/10 px-3 py-1 text-sm font-medium text-accent-500">{status}</span>
+    </div>
+
+    <div class="reveal is-visible mb-10 flex flex-wrap gap-2">
+      {tags.map((tag) => (
+        <span class="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+          {tag}
+        </span>
+      ))}
+    </div>
+
+    <div class="reveal grid gap-6 sm:grid-cols-3">
+      <div class="card p-5">
+        <p class="font-mono text-xs font-semibold uppercase tracking-wide text-brand-500">Problem</p>
+        <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">{problem}</p>
+      </div>
+      <div class="card p-5">
+        <p class="font-mono text-xs font-semibold uppercase tracking-wide text-brand-500">Approach</p>
+        <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">{approach}</p>
+      </div>
+      <div class="card p-5">
+        <p class="font-mono text-xs font-semibold uppercase tracking-wide text-brand-500">Result</p>
+        <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">{result}</p>
+      </div>
+    </div>
+
+    <div class="reveal prose prose-slate mt-10 max-w-none dark:prose-invert prose-p:leading-relaxed">
+      <Content />
+    </div>
+
+    {link && (
+      <a
+        href={link}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="reveal mt-8 inline-block rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5 hover:bg-brand-600"
+      >
+        Visit project →
+      </a>
+    )}
+  </article>
+</BaseLayout>

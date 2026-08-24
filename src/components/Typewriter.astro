@@ -1,0 +1,44 @@
+---
+interface Props {
+  words: string[];
+}
+
+const { words } = Astro.props;
+---
+
+<span class="gradient-text font-semibold" id="typewriter" data-words={JSON.stringify(words)}>
+  {words[0]}
+</span><span class="animate-pulse text-brand-500">|</span>
+
+<script>
+  const el = document.getElementById('typewriter');
+  if (el) {
+    const words: string[] = JSON.parse(el.dataset.words ?? '[]');
+    let wordIndex = 0;
+    let charIndex = words[0]?.length ?? 0;
+    let deleting = false;
+
+    const tick = () => {
+      const current = words[wordIndex];
+      if (!deleting) {
+        charIndex++;
+        if (charIndex > current.length) {
+          deleting = true;
+          setTimeout(tick, 1400);
+          return;
+        }
+      } else {
+        charIndex--;
+        if (charIndex < 0) {
+          deleting = false;
+          wordIndex = (wordIndex + 1) % words.length;
+          charIndex = 0;
+        }
+      }
+      el.textContent = current.slice(0, charIndex);
+      setTimeout(tick, deleting ? 40 : 70);
+    };
+
+    setTimeout(tick, 1400);
+  }
+</script>

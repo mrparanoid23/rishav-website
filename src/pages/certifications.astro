@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CertCard from '../components/CertCard.astro';
+import { certifications } from '../data/certifications';
+---
+
+<BaseLayout title="Certifications" description="Certifications earned by Rishav G C in SEO, marketing, and AI." path="/certifications">
+  <section class="container-page py-16">
+    <div class="reveal mb-10">
+      <p class="font-mono text-sm text-brand-500">Credentials</p>
+      <h1 class="text-4xl font-bold tracking-tight">Certifications</h1>
+      <p class="mt-3 max-w-2xl text-slate-600 dark:text-slate-300">
+        Ongoing learning in SEO, content marketing, and AI — click any card to view the certificate.
+      </p>
+    </div>
+    <div class="grid gap-4 sm:grid-cols-2">
+      {certifications.map((cert) => <CertCard {...cert} />)}
+    </div>
+  </section>
+</BaseLayout>

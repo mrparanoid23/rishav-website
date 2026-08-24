@@ -1,0 +1,5 @@
+# TODO: update the sitemap URL once the .com domain is purchased and live
+User-agent: *
+Allow: /
+
+Sitemap: https://rishavgc.com/sitemap-index.xml

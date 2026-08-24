@@ -1,0 +1,22 @@
+---
+import type { Certification } from '../data/certifications';
+
+interface Props extends Certification {}
+
+const { title, issuer, file } = Astro.props;
+---
+
+<a
+  href={file}
+  target="_blank"
+  rel="noopener noreferrer"
+  class="reveal card group flex items-center justify-between gap-4 p-5 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
+>
+  <div>
+    <p class="font-semibold transition-colors group-hover:text-brand-500">{title}</p>
+    <p class="text-sm text-slate-500 dark:text-slate-400">{issuer}</p>
+  </div>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-5 w-5 shrink-0 text-slate-400 transition-colors group-hover:text-brand-500">
+    <path d="M12 5v14M19 12l-7 7-7-7" />
+  </svg>
+</a>

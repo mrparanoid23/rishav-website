@@ -1,0 +1,39 @@
+---
+import { site } from '../data/site';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  url: Astro.site?.toString(),
+  image: new URL(site.avatar, Astro.site).toString(),
+  jobTitle: site.tagline,
+  description: site.description,
+  worksFor: {
+    '@type': 'Organization',
+    name: 'Compile and Commit Pvt. Ltd.',
+    url: site.social.company,
+  },
+  alumniOf: {
+    '@type': 'CollegeOrUniversity',
+    name: 'Apollo International College',
+  },
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Kathmandu',
+    addressCountry: 'NP',
+  },
+  email: `mailto:${site.email}`,
+  sameAs: [site.social.linkedin, site.social.github, site.social.company],
+  knowsAbout: [
+    'SEO',
+    'Digital Marketing',
+    'Data Analytics',
+    'Google Analytics 4',
+    'Python',
+    'AI Automation',
+  ],
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

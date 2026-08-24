@@ -1,0 +1,91 @@
+---
+import type { SkillCategory } from '../data/skills';
+
+interface Props {
+  categories: SkillCategory[];
+}
+
+const { categories } = Astro.props;
+---
+
+<div class="reveal" id="skill-tabs">
+  <div class="flex flex-wrap gap-2" role="tablist">
+    {categories.map((cat, i) => (
+      <button
+        type="button"
+        class="skill-tab-btn rounded-full border px-4 py-2 text-sm font-medium transition-colors border-slate-200 text-slate-600 hover:border-brand-400 hover:text-brand-500 dark:border-slate-700 dark:text-slate-300 aria-selected:border-brand-500 aria-selected:bg-brand-500 aria-selected:text-white"
+        data-panel={`panel-${i}`}
+        aria-selected={i === 0 ? 'true' : 'false'}
+      >
+        {cat.category}
+      </button>
+    ))}
+  </div>
+
+  <div class="mt-6 space-y-4">
+    {categories.map((cat, i) => (
+      <div class="skill-panel space-y-4" id={`panel-${i}`} hidden={i !== 0}>
+        {cat.skills.map((skill) => (
+          <div>
+            <div class="mb-1 flex justify-between text-sm">
+              <span class="font-medium">{skill.name}</span>
+              <span class="text-slate-500 dark:text-slate-400">{skill.level}%</span>
+            </div>
+            <div class="h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+              <div
+                class="skill-bar h-full rounded-full bg-gradient-to-r from-brand-500 to-accent-500"
+                style="width: 0%"
+                data-level={skill.level}
+              >
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    ))}
+  </div>
+</div>
+
+<script>
+  const container = document.getElementById('skill-tabs');
+  if (container) {
+    const buttons = container.querySelectorAll<HTMLButtonElement>('.skill-tab-btn');
+    const panels = container.querySelectorAll<HTMLElement>('.skill-panel');
+
+    const animateBars = (panel: HTMLElement) => {
+      panel.querySelectorAll<HTMLElement>('.skill-bar').forEach((bar) => {
+        const level = bar.dataset.level ?? '0';
+        requestAnimationFrame(() => {
+          bar.style.width = `${level}%`;
+        });
+      });
+    };
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        buttons.forEach((b) => b.setAttribute('aria-selected', 'false'));
+        btn.setAttribute('aria-selected', 'true');
+        const targetId = btn.dataset.panel;
+        panels.forEach((panel) => {
+          const show = panel.id === targetId;
+          panel.hidden = !show;
+          if (show) animateBars(panel);
+        });
+      });
+    });
+
+    const firstPanel = panels[0];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            animateBars(firstPanel);
+            observer.disconnect();
+          }
+        }
+      },
+      { threshold: 0.3 }
+    );
+    if (firstPanel) observer.observe(firstPanel);
+  }
+</script>

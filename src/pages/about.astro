@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Timeline from '../components/Timeline.astro';
+import SkillTabs from '../components/SkillTabs.astro';
+import { site } from '../data/site';
+import { bio } from '../data/bio';
+import { experience } from '../data/experience';
+import { skillCategories } from '../data/skills';
+import { education } from '../data/education';
+---
+
+<BaseLayout title="About" description={bio.summary} path="/about" type="profile" includePersonSchema>
+  <section class="container-page grid gap-10 py-16 sm:grid-cols-[220px_1fr] sm:items-start">
+    <img
+      src={site.avatar}
+      alt={site.name}
+      class="reveal is-visible mx-auto h-40 w-40 rounded-2xl object-cover shadow-lg sm:mx-0"
+    />
+    <div class="reveal is-visible space-y-4">
+      <h1 class="text-4xl font-bold tracking-tight">About Me</h1>
+      <p class="text-lg font-medium text-brand-500">{site.tagline}</p>
+      {bio.longForm.map((paragraph) => (
+        <p class="leading-relaxed text-slate-600 dark:text-slate-300">{paragraph}</p>
+      ))}
+      <a
+        href={site.resumeUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-block rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5 hover:bg-brand-600"
+      >
+        Download Resume
+      </a>
+    </div>
+  </section>
+
+  <section class="container-page py-16">
+    <h2 class="reveal mb-8 text-3xl font-bold tracking-tight">Experience</h2>
+    <Timeline entries={experience} />
+  </section>
+
+  <section class="border-t border-slate-200 py-16 dark:border-slate-800">
+    <div class="container-page">
+      <h2 class="reveal mb-8 text-3xl font-bold tracking-tight">Skills</h2>
+      <SkillTabs categories={skillCategories} />
+    </div>
+  </section>
+
+  <section class="border-t border-slate-200 py-16 dark:border-slate-800">
+    <div class="container-page">
+      <h2 class="reveal mb-8 text-3xl font-bold tracking-tight">Education</h2>
+      <div class="reveal card max-w-xl p-6">
+        {education.map((entry) => (
+          <div>
+            <p class="font-semibold">{entry.degree}</p>
+            <p class="text-brand-500">{entry.school}</p>
+            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+              {entry.start} — {entry.end} · {entry.notes}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

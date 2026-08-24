@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Typewriter from '../components/Typewriter.astro';
+import StatCounter from '../components/StatCounter.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { site } from '../data/site';
+import { bio } from '../data/bio';
+import { skillCategories } from '../data/skills';
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('projects'))
+  .filter((p) => p.data.featured)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const topSkills = skillCategories.flatMap((c) => c.skills).sort((a, b) => b.level - a.level).slice(0, 8);
+---
+
+<BaseLayout title={site.name} description={site.description} path="/" includePersonSchema>
+  <section class="container-page flex min-h-[85vh] flex-col items-start justify-center gap-6 py-20">
+    <p class="reveal is-visible font-mono text-sm text-slate-500 dark:text-slate-400">Hi, I'm</p>
+    <h1 class="reveal is-visible text-4xl font-bold tracking-tight sm:text-6xl">
+      {site.name}
+    </h1>
+    <p class="reveal is-visible text-xl font-medium text-slate-600 sm:text-2xl dark:text-slate-300">
+      <Typewriter words={site.roles} />
+    </p>
+    <p class="reveal is-visible max-w-2xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
+      {bio.summary}
+    </p>
+    <div class="reveal is-visible flex flex-wrap gap-4 pt-2">
+      <a href="/projects" class="rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5 hover:bg-brand-600">
+        View my work
+      </a>
+      <a href="/contact" class="rounded-full border border-slate-300 px-6 py-3 text-sm font-semibold transition-transform hover:-translate-y-0.5 hover:border-brand-400 dark:border-slate-700">
+        Get in touch
+      </a>
+    </div>
+  </section>
+
+  <section class="border-y border-slate-200 bg-slate-50/60 py-16 dark:border-slate-800 dark:bg-slate-900/40">
+    <div class="container-page grid grid-cols-2 gap-8 sm:grid-cols-4">
+      {bio.stats.map((stat) => (
+        <StatCounter value={stat.value} suffix={stat.suffix} label={stat.label} />
+      ))}
+    </div>
+  </section>
+
+  <section class="container-page py-20">
+    <div class="reveal mb-10 flex items-end justify-between">
+      <div>
+        <p class="font-mono text-sm text-brand-500">Selected Work</p>
+        <h2 class="text-3xl font-bold tracking-tight">Featured Projects</h2>
+      </div>
+      <a href="/projects" class="hidden text-sm font-semibold text-brand-500 hover:underline sm:block">View all →</a>
+    </div>
+    <div class="grid gap-6 sm:grid-cols-2">
+      {projects.map((project) => (
+        <ProjectCard
+          slug={project.id}
+          title={project.data.title}
+          summary={project.data.summary}
+          tags={project.data.tags}
+          status={project.data.status}
+        />
+      ))}
+    </div>
+  </section>
+
+  <section class="container-page py-20">
+    <div class="reveal mb-10">
+      <p class="font-mono text-sm text-brand-500">What I Work With</p>
+      <h2 class="text-3xl font-bold tracking-tight">Core Skills</h2>
+    </div>
+    <div class="reveal flex flex-wrap gap-3">
+      {topSkills.map((skill) => (
+        <span class="card px-4 py-2 text-sm font-medium">{skill.name}</span>
+      ))}
+    </div>
+    <a href="/about" class="reveal mt-6 inline-block text-sm font-semibold text-brand-500 hover:underline">
+      See full skill breakdown →
+    </a>
+  </section>
+
+  <section class="border-t border-slate-200 py-20 dark:border-slate-800">
+    <div class="container-page reveal flex flex-col items-center gap-6 text-center">
+      <h2 class="text-3xl font-bold tracking-tight">Let's build something worth measuring.</h2>
+      <p class="max-w-xl text-slate-600 dark:text-slate-300">
+        Whether it's marketing strategy, data analysis, or a project you want built — I'd love to hear about it.
+      </p>
+      <a href="/contact" class="rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5 hover:bg-brand-600">
+        Start a conversation
+      </a>
+    </div>
+  </section>
+</BaseLayout>
