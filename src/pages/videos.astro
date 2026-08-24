@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import VideoGrid from '../components/VideoGrid.astro';
+import { channelUrl } from '../data/youtube';
+---
+
+<BaseLayout title="Videos" description="Videos from Rishav G C on marketing, data, and building in public." path="/videos">
+  <section class="container-page py-16">
+    <div class="reveal mb-10 flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="font-mono text-sm text-brand-500">YouTube</p>
+        <h1 class="text-4xl font-bold tracking-tight">Videos</h1>
+        <p class="mt-3 max-w-2xl text-slate-600 dark:text-slate-300">
+          Real SEO audits, GA4 breakdowns, and what it's actually like building a company — no fluff.
+        </p>
+      </div>
+      {channelUrl && (
+        <a
+          href={channelUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5 hover:bg-brand-600"
+        >
+          Subscribe on YouTube
+        </a>
+      )}
+    </div>
+
+    <VideoGrid />
+  </section>
+</BaseLayout>

@@ -1,0 +1,60 @@
+---
+import { videos, channelUrl } from '../data/youtube';
+
+interface Props {
+  limit?: number;
+}
+
+const { limit } = Astro.props;
+const items = limit ? videos.slice(0, limit) : videos;
+const placeholderCount = limit ?? 3;
+---
+
+{items.length > 0 ? (
+  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    {items.map((video) => (
+      <div class="reveal card overflow-hidden">
+        <div class="aspect-video w-full">
+          <iframe
+            class="h-full w-full"
+            src={`https://www.youtube-nocookie.com/embed/${video.id}`}
+            title={video.title}
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <div class="p-4">
+          <p class="font-semibold">{video.title}</p>
+          {video.description && (
+            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">{video.description}</p>
+          )}
+        </div>
+      </div>
+    ))}
+  </div>
+) : (
+  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    {Array.from({ length: placeholderCount }).map(() => (
+      <div class="reveal card flex aspect-video flex-col items-center justify-center gap-3 border-dashed text-center">
+        <div class="grid h-12 w-12 place-items-center rounded-full bg-brand-500/10 text-brand-500">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5 translate-x-0.5">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </div>
+        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Coming soon</p>
+      </div>
+    ))}
+  </div>
+)}
+
+{items.length === 0 && (
+  <p class="reveal mt-6 text-sm text-slate-500 dark:text-slate-400">
+    New videos are on the way — check back soon{channelUrl ? (
+      <>, or <a href={channelUrl} target="_blank" rel="noopener noreferrer" class="font-medium text-brand-500 hover:underline">subscribe on YouTube</a> to get notified.</>
+    ) : (
+      '.'
+    )}
+  </p>
+)}

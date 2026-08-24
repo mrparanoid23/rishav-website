@@ -1,47 +1,76 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Typewriter from '../components/Typewriter.astro';
 import StatCounter from '../components/StatCounter.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import VideoGrid from '../components/VideoGrid.astro';
 import { site } from '../data/site';
 import { bio } from '../data/bio';
-import { skillCategories } from '../data/skills';
+import { pillars, principles } from '../data/homepage';
 import { getCollection } from 'astro:content';
 
 const projects = (await getCollection('projects'))
   .filter((p) => p.data.featured)
-  .sort((a, b) => a.data.order - b.data.order);
-
-const topSkills = skillCategories.flatMap((c) => c.skills).sort((a, b) => b.level - a.level).slice(0, 8);
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
 ---
 
 <BaseLayout title={site.name} description={site.description} path="/" includePersonSchema>
-  <section class="container-page flex min-h-[85vh] flex-col items-start justify-center gap-6 py-20">
-    <p class="reveal is-visible font-mono text-sm text-slate-500 dark:text-slate-400">Hi, I'm</p>
-    <h1 class="reveal is-visible text-4xl font-bold tracking-tight sm:text-6xl">
-      {site.name}
-    </h1>
-    <p class="reveal is-visible text-xl font-medium text-slate-600 sm:text-2xl dark:text-slate-300">
-      <Typewriter words={site.roles} />
+  <section class="container-page flex flex-col items-start gap-6 pb-16 pt-20 sm:pt-28">
+    <p class="reveal is-visible font-mono text-sm uppercase tracking-wide text-brand-500">
+      {site.tagline}
     </p>
-    <p class="reveal is-visible max-w-2xl text-base leading-relaxed text-slate-600 dark:text-slate-300">
+    <h1 class="reveal is-visible max-w-3xl text-4xl font-bold leading-tight tracking-tight sm:text-6xl">
+      Stop guessing. <span class="gradient-text">Start growing with data.</span>
+    </h1>
+    <p class="reveal is-visible max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-300">
       {bio.summary}
     </p>
     <div class="reveal is-visible flex flex-wrap gap-4 pt-2">
-      <a href="/projects" class="rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5 hover:bg-brand-600">
-        View my work
+      <a href="/videos" class="rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5 hover:bg-brand-600">
+        Watch my videos
       </a>
-      <a href="/contact" class="rounded-full border border-slate-300 px-6 py-3 text-sm font-semibold transition-transform hover:-translate-y-0.5 hover:border-brand-400 dark:border-slate-700">
-        Get in touch
+      <a href="/projects" class="rounded-full border border-slate-300 px-6 py-3 text-sm font-semibold transition-transform hover:-translate-y-0.5 hover:border-brand-400 dark:border-slate-700">
+        View my work
       </a>
     </div>
   </section>
 
-  <section class="border-y border-slate-200 bg-slate-50/60 py-16 dark:border-slate-800 dark:bg-slate-900/40">
+  <section class="border-y border-slate-200 bg-slate-50/60 py-14 dark:border-slate-800 dark:bg-slate-900/40">
     <div class="container-page grid grid-cols-2 gap-8 sm:grid-cols-4">
       {bio.stats.map((stat) => (
         <StatCounter value={stat.value} suffix={stat.suffix} label={stat.label} />
       ))}
+    </div>
+  </section>
+
+  <section class="container-page py-20">
+    <div class="reveal mb-10 flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="font-mono text-sm text-brand-500">YouTube</p>
+        <h2 class="text-3xl font-bold tracking-tight">Videos on marketing, data, and building in public.</h2>
+        <p class="mt-3 max-w-xl text-slate-600 dark:text-slate-300">
+          Real SEO audits, GA4 breakdowns, and lessons from running Compile and Commit — no fluff.
+        </p>
+      </div>
+      <a href="/videos" class="hidden text-sm font-semibold text-brand-500 hover:underline sm:block">All videos →</a>
+    </div>
+    <VideoGrid limit={3} />
+  </section>
+
+  <section class="border-t border-slate-200 py-20 dark:border-slate-800">
+    <div class="container-page">
+      <div class="reveal mb-10">
+        <p class="font-mono text-sm text-brand-500">What I Do</p>
+        <h2 class="text-3xl font-bold tracking-tight">Three ways I help businesses grow.</h2>
+      </div>
+      <div class="grid gap-6 sm:grid-cols-3">
+        {pillars.map((pillar) => (
+          <article class="reveal card p-6">
+            <h3 class="text-lg font-semibold">{pillar.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{pillar.description}</p>
+          </article>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -53,7 +82,7 @@ const topSkills = skillCategories.flatMap((c) => c.skills).sort((a, b) => b.leve
       </div>
       <a href="/projects" class="hidden text-sm font-semibold text-brand-500 hover:underline sm:block">View all →</a>
     </div>
-    <div class="grid gap-6 sm:grid-cols-2">
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {projects.map((project) => (
         <ProjectCard
           slug={project.id}
@@ -66,19 +95,41 @@ const topSkills = skillCategories.flatMap((c) => c.skills).sort((a, b) => b.leve
     </div>
   </section>
 
-  <section class="container-page py-20">
-    <div class="reveal mb-10">
-      <p class="font-mono text-sm text-brand-500">What I Work With</p>
-      <h2 class="text-3xl font-bold tracking-tight">Core Skills</h2>
+  <section class="border-t border-slate-200 py-20 dark:border-slate-800">
+    <div class="container-page">
+      <div class="reveal mb-12">
+        <p class="font-mono text-sm text-brand-500">How I Think</p>
+        <h2 class="text-3xl font-bold tracking-tight">Three questions before any decision.</h2>
+      </div>
+      <div class="grid gap-10 sm:grid-cols-3">
+        {principles.map((principle) => (
+          <div class="reveal">
+            <p class="font-mono text-3xl font-bold text-brand-500/40">{principle.number}</p>
+            <h3 class="mt-3 text-lg font-semibold">{principle.question}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{principle.answer}</p>
+          </div>
+        ))}
+      </div>
     </div>
-    <div class="reveal flex flex-wrap gap-3">
-      {topSkills.map((skill) => (
-        <span class="card px-4 py-2 text-sm font-medium">{skill.name}</span>
-      ))}
+  </section>
+
+  <section class="border-t border-slate-200 py-20 dark:border-slate-800">
+    <div class="container-page grid gap-10 sm:grid-cols-[200px_1fr] sm:items-center">
+      <img
+        src={site.avatar}
+        alt={site.name}
+        class="reveal mx-auto h-40 w-40 rounded-2xl object-cover shadow-lg sm:mx-0"
+      />
+      <div class="reveal space-y-4">
+        <p class="font-mono text-sm text-brand-500">Who's Behind This</p>
+        <h2 class="text-2xl font-bold tracking-tight">{site.name}</h2>
+        <p class="leading-relaxed text-slate-600 dark:text-slate-300">{bio.longForm[0]}</p>
+        <div class="flex flex-wrap gap-4 pt-1">
+          <a href="/about" class="text-sm font-semibold text-brand-500 hover:underline">Read my full story →</a>
+          <a href="/contact" class="text-sm font-semibold text-brand-500 hover:underline">Let's chat →</a>
+        </div>
+      </div>
     </div>
-    <a href="/about" class="reveal mt-6 inline-block text-sm font-semibold text-brand-500 hover:underline">
-      See full skill breakdown →
-    </a>
   </section>
 
   <section class="border-t border-slate-200 py-20 dark:border-slate-800">
