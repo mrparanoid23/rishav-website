@@ -2,7 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import StatCounter from '../components/StatCounter.astro';
 import ProjectCard from '../components/ProjectCard.astro';
-import VideoGrid from '../components/VideoGrid.astro';
 import { site } from '../data/site';
 import { bio } from '../data/bio';
 import { pillars, principles } from '../data/homepage';
@@ -41,20 +40,6 @@ const projects = (await getCollection('projects'))
         <StatCounter value={stat.value} suffix={stat.suffix} label={stat.label} />
       ))}
     </div>
-  </section>
-
-  <section class="container-page py-20">
-    <div class="reveal mb-10 flex flex-wrap items-end justify-between gap-4">
-      <div>
-        <p class="font-mono text-sm text-brand-500">YouTube</p>
-        <h2 class="text-3xl font-bold tracking-tight">Videos on marketing, data, and building in public.</h2>
-        <p class="mt-3 max-w-xl text-slate-600 dark:text-slate-300">
-          Real SEO audits, GA4 breakdowns, and lessons from running Compile and Commit — no fluff.
-        </p>
-      </div>
-      <a href="/videos" class="hidden text-sm font-semibold text-brand-500 hover:underline sm:block">All videos →</a>
-    </div>
-    <VideoGrid limit={3} />
   </section>
 
   <section class="border-t border-slate-200 py-20 dark:border-slate-800">
